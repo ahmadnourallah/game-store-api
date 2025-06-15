@@ -153,19 +153,25 @@ const validateGame = () => [
 		.optional()
 		.toArray()
 		.isArray()
-		.withMessage("Genres must be an array"),
+		.withMessage("Genres must be an array")
+		.notEmpty()
+		.withMessage("Genres cannot be an empty array"),
 	body("platforms")
 		.trim()
 		.optional()
 		.toArray()
 		.isArray()
-		.withMessage("Platforms must be an array"),
+		.withMessage("Platforms must be an array")
+		.notEmpty()
+		.withMessage("Platforms cannot be an empty array"),
 	body("publishers")
 		.trim()
 		.optional()
 		.toArray()
 		.isArray()
-		.withMessage("Publishers must be an array"),
+		.withMessage("Publishers must be an array")
+		.notEmpty()
+		.withMessage("Publishers cannot be an empty array"),
 	validateResults,
 ];
 
