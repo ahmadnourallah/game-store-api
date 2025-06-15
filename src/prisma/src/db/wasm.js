@@ -130,12 +130,27 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.GameScalarFieldEnum = {
   id: 'id',
-  images: 'images',
   title: 'title',
+  images: 'images',
   description: 'description',
   price: 'price',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CartScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CartItemScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  gameId: 'gameId',
+  quantity: 'quantity',
+  price: 'price'
 };
 
 exports.Prisma.PlatformScalarFieldEnum = {
@@ -173,6 +188,8 @@ exports.Role = exports.$Enums.Role = {
 exports.Prisma.ModelName = {
   User: 'User',
   Game: 'Game',
+  Cart: 'Cart',
+  CartItem: 'CartItem',
   Platform: 'Platform',
   Genre: 'Genre',
   Publisher: 'Publisher'
