@@ -8,11 +8,12 @@ import gameRouter from "./routes/game.router";
 import platformRouter from "./routes/platform.router";
 import genreRouter from "./routes/genre.router";
 import publisherRouter from "./routes/publisher.router";
+import jsonParser from "./middleware/jsonParser.middleware";
 import "./config/passport.config";
 
 const app = express();
 
-app.use(express.json());
+app.use(jsonParser);
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", userRouter);
