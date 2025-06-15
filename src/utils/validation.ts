@@ -1,12 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientError } from "../middleware/error.middleware";
 import { validationResult, query, body, param } from "express-validator";
-import {
-	PrismaClient,
-	Platform,
-	Publisher,
-	Genre,
-} from "../prisma/src/db/index";
+import { PrismaClient } from "../prisma/src/db/index";
 
 const prisma = new PrismaClient();
 
@@ -124,6 +119,79 @@ const validateLogin = () => [
 	body("email").trim().notEmpty().withMessage("Email cannot be empty"),
 	body("password").trim().notEmpty().withMessage("Password cannot be empty"),
 	validateResults,
+];
+
+const validateGame = () => [
+	body("title")
+		.trim()
+		.notEmpty()
+		.withMessage("Title cannot be empty")
+		.isString()
+		.withMessage("Title must be a string")
+		.custom(async (title, { req }) => {
+			const gameExists = await prisma.game.findFirst({
+				where: { id: { not: req?.params?.gameId }, title },
+			});
+
+			if (gameExists) throw new Error("Title must be unique");
+		}),
+	body("description")
+		.trim()
+		.notEmpty()
+		.withMessage("Description cannot be empty")
+		.isString()
+		.withMessage("Description must be a string"),
+	body("price")
+		.trim()
+		.notEmpty()
+		.withMessage("Price cannot be empty")
+		.toFloat()
+		.isFloat()
+		.withMessage("Price must be a floating point number"),
+	body("genres")
+		.trim()
+		.optional()
+		.toArray()
+		.isArray()
+		.withMessage("Genres must be an array"),
+	body("platforms")
+		.trim()
+		.optional()
+		.toArray()
+		.isArray()
+		.withMessage("Platforms must be an array"),
+	body("publishers")
+		.trim()
+		.optional()
+		.toArray()
+		.isArray()
+		.withMessage("Publishers must be an array"),
+	validateResults,
+];
+
+const validateGameId = () => [
+	param("gameId")
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage("Game's id cannot be empty")
+		.bail()
+		.toInt()
+		.isNumeric()
+		.withMessage("Game's id must be a number")
+		.bail(),
+
+	validateResults,
+
+	async (req: Request, res: Response, next: NextFunction) => {
+		const gameExists = await prisma.game.findUnique({
+			where: { id: req?.params?.gameId as unknown as number },
+		});
+
+		if (!gameExists)
+			throw new ClientError({ resource: "Resource not found" }, 404);
+		next();
+	},
 ];
 
 const validatePlatform = () => [
@@ -311,6 +379,8 @@ export {
 	validateUser,
 	validateUserId,
 	validateLogin,
+	validateGame,
+	validateGameId,
 	validatePlatform,
 	validatePlatformId,
 	validateGenre,
