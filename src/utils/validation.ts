@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientError } from "../middleware/error.middleware";
 import { validationResult, query, body, param } from "express-validator";
-import { PrismaClient } from "../prisma/src/db/index";
+import {
+	PrismaClient,
+	Platform,
+	Publisher,
+	Genre,
+} from "../prisma/src/db/index";
 
 const prisma = new PrismaClient();
 
@@ -121,4 +126,71 @@ const validateLogin = () => [
 	validateResults,
 ];
 
-export { validateQueries, validateUser, validateUserId, validateLogin };
+const validatePlatform = () => [
+	body("name")
+		.trim()
+		.notEmpty()
+		.withMessage("Platform's name cannot be empty")
+		.bail()
+		.isString()
+		.withMessage("Platform's name must be a string")
+		.bail()
+		.custom(async (name, { req }) => {
+			const platformExists = await prisma.platform.findFirst({
+				where: { id: { not: req?.params?.platformId }, name },
+			});
+
+			if (platformExists) throw new Error("Platform must be unique");
+		}),
+	body("games")
+		.trim()
+		.optional()
+		.toArray()
+		.isArray()
+		.withMessage("games must be an array of titles")
+		.bail()
+		.custom(async (games) => {
+			for (let game of games) {
+				const gameExists = await prisma.game.findUnique({
+					where: { title: game },
+				});
+
+				if (!gameExists) throw new Error("Some games don't exist");
+			}
+		}),
+	validateResults,
+];
+
+const validatePlatformId = () => [
+	param("platformId")
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage("Platform's id cannot be empty")
+		.bail()
+		.toInt()
+		.isNumeric()
+		.withMessage("Platform's id must be a number")
+		.bail(),
+
+	validateResults,
+
+	async (req: Request, res: Response, next: NextFunction) => {
+		const platformExists = await prisma.platform.findUnique({
+			where: { id: req?.params?.platformId as unknown as number },
+		});
+
+		if (!platformExists)
+			throw new ClientError({ resource: "Resource not found" }, 404);
+		next();
+	},
+];
+
+export {
+	validateQueries,
+	validateUser,
+	validateUserId,
+	validateLogin,
+	validatePlatform,
+	validatePlatformId,
+};
