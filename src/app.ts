@@ -6,6 +6,7 @@ import express from "express";
 import userRouter from "./routes/user.router";
 import gameRouter from "./routes/game.router";
 import platformRouter from "./routes/platform.router";
+import genreRouter from "./routes/genre.router";
 import "./config/passport.config";
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/users", userRouter);
 app.use("/games", gameRouter);
 app.use("/platforms", platformRouter);
+app.use("/genres", genreRouter);
 
 app.use(clientErrorHandler);
 app.use(serverErrorHandler);
