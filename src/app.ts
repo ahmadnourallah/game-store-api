@@ -3,6 +3,7 @@ import {
 	clientErrorHandler,
 } from "./middleware/error.middleware";
 import express from "express";
+import "./config/passport.config";
 
 const app = express();
 
