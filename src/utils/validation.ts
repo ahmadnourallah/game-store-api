@@ -186,6 +186,66 @@ const validatePlatformId = () => [
 	},
 ];
 
+const validateGenre = () => [
+	body("name")
+		.trim()
+		.notEmpty()
+		.withMessage("Genre's name cannot be empty")
+		.bail()
+		.isString()
+		.withMessage("Genre's name must be a string")
+		.bail()
+		.custom(async (name, { req }) => {
+			const genreExists = await prisma.genre.findFirst({
+				where: { id: { not: req?.params?.genreId }, name },
+			});
+
+			if (genreExists) throw new Error("Genre must be unique");
+		}),
+	body("games")
+		.trim()
+		.optional()
+		.toArray()
+		.isArray()
+		.withMessage("games must be an array of titles")
+		.bail()
+		.custom(async (games) => {
+			for (let game of games) {
+				const gameExists = await prisma.game.findUnique({
+					where: { title: game },
+				});
+
+				if (!gameExists) throw new Error("Some games don't exist");
+			}
+		}),
+	validateResults,
+];
+
+const validateGenreId = () => [
+	param("genreId")
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage("Genre's id cannot be empty")
+		.bail()
+		.toInt()
+		.isNumeric()
+		.withMessage("Genre's id must be a number")
+		.bail(),
+
+	validateResults,
+
+	async (req: Request, res: Response, next: NextFunction) => {
+		const genreExists = await prisma.genre.findUnique({
+			where: { id: req?.params?.genreId as unknown as number },
+		});
+
+		if (!genreExists)
+			throw new ClientError({ resource: "Resource not found" }, 404);
+		next();
+	},
+];
+
 export {
 	validateQueries,
 	validateUser,
@@ -193,4 +253,6 @@ export {
 	validateLogin,
 	validatePlatform,
 	validatePlatformId,
+	validateGenre,
+	validateGenreId,
 };
