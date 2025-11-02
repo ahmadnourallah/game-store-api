@@ -2,37 +2,37 @@ import { Router } from "express";
 import {
 	validateQueries,
 	validateGenre,
-	validateGenreId,
+	validateGenreName,
 } from "../utils/validation";
 import { isAdmin, isAuthenticated } from "../middleware/auth.middleware";
 import genreController from "../controllers/genre.controller";
 
 const router = Router();
 
-router.get("/:genreId", validateGenreId(), genreController.getGenre);
+router.get("/:genreName", validateGenreName(), genreController.getGenre);
 
 router.get(
-	"/:genreId/games",
-	validateGenreId(),
+	"/:genreName/games",
+	validateGenreName(),
 	validateQueries(),
 	genreController.getGenreGames
 );
 
 router.put(
-	"/:genreId",
+	"/:genreName",
 	isAuthenticated,
 	isAdmin,
-	validateGenreId(),
+	validateGenreName(),
 	validateGenre(),
 	genreController.updateGenre
 );
 router.get("/", validateQueries(), genreController.getGenres);
 
 router.delete(
-	"/:genreId",
+	"/:genreName",
 	isAuthenticated,
 	isAdmin,
-	validateGenreId(),
+	validateGenreName(),
 	genreController.deleteGenre
 );
 

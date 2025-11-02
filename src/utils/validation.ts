@@ -294,23 +294,22 @@ const validateGenre = () => [
 	validateResults,
 ];
 
-const validateGenreId = () => [
-	param("genreId")
+const validateGenreName = () => [
+	param("genreName")
 		.trim()
 		.escape()
 		.notEmpty()
-		.withMessage("Genre's id cannot be empty")
+		.withMessage("Genre's name cannot be empty")
 		.bail()
-		.toInt()
-		.isNumeric()
-		.withMessage("Genre's id must be a number")
+		.isString()
+		.withMessage("Genre's name must be a string")
 		.bail(),
 
 	validateResults,
 
 	async (req: Request, res: Response, next: NextFunction) => {
 		const genreExists = await prisma.genre.findUnique({
-			where: { id: req?.params?.genreId as unknown as number },
+			where: { name: req?.params?.genreName as unknown as string },
 		});
 
 		if (!genreExists)
@@ -389,7 +388,7 @@ export {
 	validatePlatform,
 	validatePlatformName,
 	validateGenre,
-	validateGenreId,
+	validateGenreName,
 	validatePublisher,
 	validatePublisherId,
 };

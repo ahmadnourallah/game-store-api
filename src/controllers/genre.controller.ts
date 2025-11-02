@@ -25,10 +25,10 @@ const getGenres = async (req: Request, res: Response) => {
 };
 
 const getGenre = async (req: Request, res: Response) => {
-	const { genreId } = matchedData(req);
+	const { genreName } = matchedData(req);
 
 	const genre = await prisma.genre.findUnique({
-		where: { id: genreId },
+		where: { name: genreName },
 		include: {
 			_count: { select: { games: true } },
 		},
@@ -38,13 +38,13 @@ const getGenre = async (req: Request, res: Response) => {
 };
 
 const getGenreGames = async (req: Request, res: Response) => {
-	const { start, end, search, order, orderBy, genreId } = matchedData(req);
+	const { start, end, search, order, orderBy, genreName } = matchedData(req);
 
 	const games = await prisma.game.findMany({
 		where: {
 			genres: {
 				some: {
-					id: genreId,
+					name: genreName,
 				},
 			},
 			OR: [
@@ -57,6 +57,7 @@ const getGenreGames = async (req: Request, res: Response) => {
 		orderBy: {
 			[orderBy === "title" ? "title" : "createdAt"]: order,
 		},
+		include: { platforms: true },
 	});
 
 	res.status(200).json({
@@ -87,7 +88,7 @@ const createGenre = async (req: Request, res: Response) => {
 };
 
 const updateGenre = async (req: Request, res: Response) => {
-	const { genreId, name, games } = matchedData(req);
+	const { genreName, name, games } = matchedData(req);
 
 	let newGames;
 	let excludedGames;
@@ -98,7 +99,7 @@ const updateGenre = async (req: Request, res: Response) => {
 		});
 
 		const genre = await prisma.genre.findUnique({
-			where: { id: genreId },
+			where: { name: genreName },
 			select: { games: { select: { title: true } } },
 		});
 
@@ -109,7 +110,7 @@ const updateGenre = async (req: Request, res: Response) => {
 
 	const genre = await prisma.genre.update({
 		where: {
-			id: genreId,
+			name: genreName,
 		},
 		data: {
 			name,
@@ -130,9 +131,9 @@ const updateGenre = async (req: Request, res: Response) => {
 };
 
 const deleteGenre = async (req: Request, res: Response) => {
-	const { genreId } = matchedData(req);
+	const { genreName } = matchedData(req);
 
-	await prisma.genre.delete({ where: { id: genreId } });
+	await prisma.genre.delete({ where: { name: genreName } });
 
 	res.status(200).json({ status: "success", data: null });
 };
