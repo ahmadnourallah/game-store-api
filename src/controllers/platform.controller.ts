@@ -25,10 +25,10 @@ const getPlatforms = async (req: Request, res: Response) => {
 };
 
 const getPlatform = async (req: Request, res: Response) => {
-	const { platformId } = matchedData(req);
+	const { platformName } = matchedData(req);
 
 	const platform = await prisma.platform.findUnique({
-		where: { id: platformId },
+		where: { name: platformName },
 		include: {
 			_count: { select: { games: true } },
 		},
@@ -38,13 +38,14 @@ const getPlatform = async (req: Request, res: Response) => {
 };
 
 const getPlatformGames = async (req: Request, res: Response) => {
-	const { start, end, search, order, orderBy, platformId } = matchedData(req);
+	const { start, end, search, order, orderBy, platformName } =
+		matchedData(req);
 
 	const games = await prisma.game.findMany({
 		where: {
 			platforms: {
 				some: {
-					id: platformId,
+					name: platformName,
 				},
 			},
 			OR: [
@@ -57,6 +58,7 @@ const getPlatformGames = async (req: Request, res: Response) => {
 		orderBy: {
 			[orderBy === "title" ? "title" : "createdAt"]: order,
 		},
+		include: { platforms: true },
 	});
 
 	res.status(200).json({
@@ -87,7 +89,7 @@ const createPlatform = async (req: Request, res: Response) => {
 };
 
 const updatePlatform = async (req: Request, res: Response) => {
-	const { platformId, name, games } = matchedData(req);
+	const { platformName, name, games } = matchedData(req);
 
 	let newGames;
 	let excludedGames;
@@ -98,7 +100,7 @@ const updatePlatform = async (req: Request, res: Response) => {
 		});
 
 		const platform = await prisma.platform.findUnique({
-			where: { id: platformId },
+			where: { name: platformName },
 			select: { games: { select: { title: true } } },
 		});
 
@@ -109,7 +111,7 @@ const updatePlatform = async (req: Request, res: Response) => {
 
 	const platform = await prisma.platform.update({
 		where: {
-			id: platformId,
+			name: platformName,
 		},
 		data: {
 			name,
@@ -130,9 +132,9 @@ const updatePlatform = async (req: Request, res: Response) => {
 };
 
 const deletePlatform = async (req: Request, res: Response) => {
-	const { platformId } = matchedData(req);
+	const { platformName } = matchedData(req);
 
-	await prisma.platform.delete({ where: { id: platformId } });
+	await prisma.platform.delete({ where: { name: platformName } });
 
 	res.status(200).json({ status: "success", data: null });
 };

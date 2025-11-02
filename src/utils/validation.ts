@@ -235,23 +235,22 @@ const validatePlatform = () => [
 	validateResults,
 ];
 
-const validatePlatformId = () => [
-	param("platformId")
+const validatePlatformName = () => [
+	param("platformName")
 		.trim()
 		.escape()
 		.notEmpty()
-		.withMessage("Platform's id cannot be empty")
+		.withMessage("Platform's name cannot be empty")
 		.bail()
-		.toInt()
-		.isNumeric()
-		.withMessage("Platform's id must be a number")
+		.isString()
+		.withMessage("Platform's name must be a string")
 		.bail(),
 
 	validateResults,
 
 	async (req: Request, res: Response, next: NextFunction) => {
 		const platformExists = await prisma.platform.findUnique({
-			where: { id: req?.params?.platformId as unknown as number },
+			where: { name: req?.params?.platformName as unknown as string },
 		});
 
 		if (!platformExists)
@@ -388,7 +387,7 @@ export {
 	validateGame,
 	validateGameId,
 	validatePlatform,
-	validatePlatformId,
+	validatePlatformName,
 	validateGenre,
 	validateGenreId,
 	validatePublisher,

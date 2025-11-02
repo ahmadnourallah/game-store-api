@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
 	validateQueries,
 	validatePlatform,
-	validatePlatformId,
+	validatePlatformName,
 } from "../utils/validation";
 import platformController from "../controllers/platform.controller";
 import { isAdmin, isAuthenticated } from "../middleware/auth.middleware";
@@ -10,33 +10,33 @@ import { isAdmin, isAuthenticated } from "../middleware/auth.middleware";
 const router = Router();
 
 router.get(
-	"/:platformId",
-	validatePlatformId(),
+	"/:platformName",
+	validatePlatformName(),
 	platformController.getPlatform
 );
 
 router.get(
-	"/:platformId/games",
-	validatePlatformId(),
+	"/:platformName/games",
+	validatePlatformName(),
 	validateQueries(),
 	platformController.getPlatformGames
 );
 
 router.put(
-	"/:platformId",
+	"/:platformName",
 	isAuthenticated,
 	isAdmin,
-	validatePlatformId(),
+	validatePlatformName(),
 	validatePlatform(),
 	platformController.updatePlatform
 );
 router.get("/", validateQueries(), platformController.getPlatforms);
 
 router.delete(
-	"/:platformId",
+	"/:platformName",
 	isAuthenticated,
 	isAdmin,
-	validatePlatformId(),
+	validatePlatformName(),
 	platformController.deletePlatform
 );
 
