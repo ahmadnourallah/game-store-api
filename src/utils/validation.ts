@@ -5,16 +5,23 @@ import { Cart, PrismaClient } from "../prisma/src/db/index";
 
 const prisma = new PrismaClient();
 
+type ValidationResultError = {
+	[key: string]: string;
+};
+
 const validateResults = (req: Request, res: Response, next: NextFunction) => {
 	const errors = validationResult(req);
-	if (!errors.isEmpty())
-		throw new ClientError(
-			errors
-				.formatWith(({ path, msg }) => {
-					return { [path]: msg };
-				})
-				.array()
-		);
+
+	if (!errors.isEmpty()) {
+		const validationErrors: ValidationResultError[] = [];
+		errors.array().forEach((error) => {
+			if (error.type === "field")
+				validationErrors.push({ [error.path]: error.msg });
+		});
+
+		throw new ClientError(validationErrors);
+	}
+
 	next();
 };
 
@@ -437,6 +444,7 @@ const validateCartItemId = () => [
 ];
 
 export {
+	ValidationResultError,
 	validateQueries,
 	validateUser,
 	validateUserId,

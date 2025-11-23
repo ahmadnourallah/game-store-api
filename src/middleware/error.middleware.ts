@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { ValidationResultError } from "../utils/validation";
 
 class ServerError extends Error {
 	public code;
@@ -14,7 +15,7 @@ class ClientError extends Error {
 	public errors;
 
 	constructor(
-		errors: { [key: string]: string } | { [key: string]: string }[],
+		errors: ValidationResultError | ValidationResultError[],
 		code: number = 422,
 		message: string = ""
 	) {
@@ -45,6 +46,7 @@ const serverErrorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
+	console.log("here", err.stack);
 	res.status(err.code || 500).json({
 		status: "error",
 		code: err.code || 500,
