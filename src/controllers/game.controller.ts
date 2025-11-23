@@ -42,6 +42,7 @@ const getGame = async (req: Request, res: Response) => {
 const createGame = async (req: Request, res: Response) => {
 	const { title, description, price, genres, publishers, platforms } =
 		matchedData(req);
+	const images = req.files as Express.Multer.File[];
 
 	const newGenres =
 		genres &&
@@ -60,7 +61,6 @@ const createGame = async (req: Request, res: Response) => {
 				create: { name: platform },
 			};
 		});
-
 	const newPublishers =
 		publishers &&
 		publishers.map((publisher: string) => {
@@ -75,6 +75,7 @@ const createGame = async (req: Request, res: Response) => {
 			title,
 			description,
 			price,
+			images: images ? images.map((image) => image.path) : undefined,
 			genres: { connectOrCreate: newGenres },
 			platforms: { connectOrCreate: newPlatforms },
 			publishers: { connectOrCreate: newPublishers },
@@ -89,6 +90,7 @@ const createGame = async (req: Request, res: Response) => {
 const updateGame = async (req: Request, res: Response) => {
 	const { gameId, title, description, price, publishers, genres, platforms } =
 		matchedData(req);
+	const images = req.files as Express.Multer.File[];
 
 	let newPublishers,
 		excludedPublishers,
@@ -153,6 +155,7 @@ const updateGame = async (req: Request, res: Response) => {
 			title,
 			description,
 			price,
+			images: images ? images.map((image) => image.path) : undefined,
 			genres: {
 				connectOrCreate: newGenres,
 				disconnect: excludedGenres,

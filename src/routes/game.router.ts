@@ -6,6 +6,7 @@ import {
 	validateGameId,
 } from "../utils/validation";
 import gameController from "../controllers/game.controller";
+import imageMiddleware from "../middleware/imageMiddleware";
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.put(
 	isAuthenticated,
 	isAdmin,
 	validateGameId(),
+	imageMiddleware,
 	validateGame(),
 	gameController.updateGame
 );
@@ -32,6 +34,7 @@ router.post(
 	"/",
 	isAuthenticated,
 	isAdmin,
+	imageMiddleware,
 	validateGame(),
 	gameController.createGame
 );
