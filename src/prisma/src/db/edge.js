@@ -177,7 +177,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/ahmadnourallah/TOP/game-store-api/src/prisma/src/db",
+      "value": "/home/ahmadnouralla/TOP/game-store-api/src/prisma/src/db",
       "fromEnvVar": null
     },
     "config": {
@@ -191,7 +191,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/ahmadnourallah/TOP/game-store-api/src/prisma/schema.prisma",
+    "sourceFilePath": "/home/ahmadnouralla/TOP/game-store-api/src/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -204,6 +204,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
