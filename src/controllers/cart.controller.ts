@@ -1,0 +1,92 @@
+import { Request, Response } from "express";
+import { Cart, Game, PrismaClient } from "../prisma/src/db";
+import { matchedData } from "express-validator";
+
+const prisma = new PrismaClient();
+
+const getCart = async (req: Request, res: Response) => {
+	const cart = await prisma.cart.findUnique({
+		where: { userId: req?.user?.id },
+		include: { cartItems: true },
+	});
+
+	res.status(200).json({ status: "success", data: { cart } });
+};
+
+const deleteCart = async (req: Request, res: Response) => {
+	const cart = (await prisma.cart.findUnique({
+		where: { userId: req?.user?.id },
+	})) as Cart;
+
+	await prisma.cartItem.deleteMany({
+		where: {
+			cartId: cart.id,
+		},
+	});
+
+	res.status(200).json({ status: "success", data: null });
+};
+
+const createCartItem = async (req: Request, res: Response) => {
+	const { gameId, quantity } = matchedData(req);
+
+	const game = (await prisma.game.findUnique({
+		where: { id: gameId },
+	})) as Game;
+
+	const oldCart = (await prisma.cart.findUnique({
+		where: { userId: req?.user?.id },
+	})) as Cart;
+
+	await prisma.cartItem.upsert({
+		where: {
+			cartId_gameId: {
+				cartId: oldCart.id,
+				gameId,
+			},
+		},
+		update: {
+			quantity: { increment: quantity },
+			price: { increment: quantity * game.price },
+		},
+		create: {
+			cart: { connect: { id: oldCart.id } },
+			game: { connect: { id: game.id } },
+			quantity,
+			price: game.price * quantity,
+		},
+	});
+
+	const updatedCart = await prisma.cart.findUnique({
+		where: { userId: req?.user?.id },
+		include: { cartItems: true },
+	});
+
+	res.status(201).json({ status: "success", data: { cart: updatedCart } });
+};
+
+const deleteCartItem = async (req: Request, res: Response) => {
+	const { gameId } = matchedData(req);
+
+	const cart = (await prisma.cart.findUnique({
+		where: { userId: req?.user?.id },
+	})) as Cart;
+
+	await prisma.cartItem.delete({
+		where: {
+			cartId_gameId: {
+				cartId: cart.id,
+				gameId,
+			},
+		},
+	});
+
+	res.status(200).json({ status: "success", data: null });
+};
+
+export default {
+	getCart,
+	deleteCart,
+	deleteCartItem,
+	createCartItem,
+};

@@ -8,6 +8,7 @@ import gameRouter from "./routes/game.router";
 import platformRouter from "./routes/platform.router";
 import genreRouter from "./routes/genre.router";
 import publisherRouter from "./routes/publisher.router";
+import cartRouter from "./routes/cart.router";
 import jsonParser from "./middleware/jsonParser.middleware";
 import config from "./config/env.config";
 import cors from "cors";
@@ -39,6 +40,7 @@ app.use("/games", gameRouter);
 app.use("/platforms", platformRouter);
 app.use("/genres", genreRouter);
 app.use("/publishers", publisherRouter);
+app.use("/cart", cartRouter);
 
 app.use(clientErrorHandler);
 app.use(serverErrorHandler);
