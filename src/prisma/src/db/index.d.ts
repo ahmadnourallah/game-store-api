@@ -5050,7 +5050,6 @@ export namespace Prisma {
   }
 
   export type CartItemAvgAggregateOutputType = {
-    id: number | null
     cartId: number | null
     gameId: number | null
     quantity: number | null
@@ -5058,7 +5057,6 @@ export namespace Prisma {
   }
 
   export type CartItemSumAggregateOutputType = {
-    id: number | null
     cartId: number | null
     gameId: number | null
     quantity: number | null
@@ -5066,7 +5064,6 @@ export namespace Prisma {
   }
 
   export type CartItemMinAggregateOutputType = {
-    id: number | null
     cartId: number | null
     gameId: number | null
     quantity: number | null
@@ -5074,7 +5071,6 @@ export namespace Prisma {
   }
 
   export type CartItemMaxAggregateOutputType = {
-    id: number | null
     cartId: number | null
     gameId: number | null
     quantity: number | null
@@ -5082,7 +5078,6 @@ export namespace Prisma {
   }
 
   export type CartItemCountAggregateOutputType = {
-    id: number
     cartId: number
     gameId: number
     quantity: number
@@ -5092,7 +5087,6 @@ export namespace Prisma {
 
 
   export type CartItemAvgAggregateInputType = {
-    id?: true
     cartId?: true
     gameId?: true
     quantity?: true
@@ -5100,7 +5094,6 @@ export namespace Prisma {
   }
 
   export type CartItemSumAggregateInputType = {
-    id?: true
     cartId?: true
     gameId?: true
     quantity?: true
@@ -5108,7 +5101,6 @@ export namespace Prisma {
   }
 
   export type CartItemMinAggregateInputType = {
-    id?: true
     cartId?: true
     gameId?: true
     quantity?: true
@@ -5116,7 +5108,6 @@ export namespace Prisma {
   }
 
   export type CartItemMaxAggregateInputType = {
-    id?: true
     cartId?: true
     gameId?: true
     quantity?: true
@@ -5124,7 +5115,6 @@ export namespace Prisma {
   }
 
   export type CartItemCountAggregateInputType = {
-    id?: true
     cartId?: true
     gameId?: true
     quantity?: true
@@ -5219,7 +5209,6 @@ export namespace Prisma {
   }
 
   export type CartItemGroupByOutputType = {
-    id: number
     cartId: number
     gameId: number
     quantity: number
@@ -5246,7 +5235,6 @@ export namespace Prisma {
 
 
   export type CartItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     cartId?: boolean
     gameId?: boolean
     quantity?: boolean
@@ -5256,7 +5244,6 @@ export namespace Prisma {
   }, ExtArgs["result"]["cartItem"]>
 
   export type CartItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     cartId?: boolean
     gameId?: boolean
     quantity?: boolean
@@ -5266,7 +5253,6 @@ export namespace Prisma {
   }, ExtArgs["result"]["cartItem"]>
 
   export type CartItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     cartId?: boolean
     gameId?: boolean
     quantity?: boolean
@@ -5276,14 +5262,13 @@ export namespace Prisma {
   }, ExtArgs["result"]["cartItem"]>
 
   export type CartItemSelectScalar = {
-    id?: boolean
     cartId?: boolean
     gameId?: boolean
     quantity?: boolean
     price?: boolean
   }
 
-  export type CartItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cartId" | "gameId" | "quantity" | "price", ExtArgs["result"]["cartItem"]>
+  export type CartItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"cartId" | "gameId" | "quantity" | "price", ExtArgs["result"]["cartItem"]>
   export type CartItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cart?: boolean | CartDefaultArgs<ExtArgs>
     game?: boolean | GameDefaultArgs<ExtArgs>
@@ -5304,7 +5289,6 @@ export namespace Prisma {
       game: Prisma.$GamePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: number
       cartId: number
       gameId: number
       quantity: number
@@ -5392,8 +5376,8 @@ export namespace Prisma {
      * // Get first 10 CartItems
      * const cartItems = await prisma.cartItem.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const cartItemWithIdOnly = await prisma.cartItem.findMany({ select: { id: true } })
+     * // Only select the `cartId`
+     * const cartItemWithCartIdOnly = await prisma.cartItem.findMany({ select: { cartId: true } })
      * 
      */
     findMany<T extends CartItemFindManyArgs>(args?: SelectSubset<T, CartItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -5437,9 +5421,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many CartItems and only return the `id`
-     * const cartItemWithIdOnly = await prisma.cartItem.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many CartItems and only return the `cartId`
+     * const cartItemWithCartIdOnly = await prisma.cartItem.createManyAndReturn({
+     *   select: { cartId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -5528,9 +5512,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more CartItems and only return the `id`
-     * const cartItemWithIdOnly = await prisma.cartItem.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more CartItems and only return the `cartId`
+     * const cartItemWithCartIdOnly = await prisma.cartItem.updateManyAndReturn({
+     *   select: { cartId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5734,7 +5718,6 @@ export namespace Prisma {
    * Fields of the CartItem model
    */
   interface CartItemFieldRefs {
-    readonly id: FieldRef<"CartItem", 'Int'>
     readonly cartId: FieldRef<"CartItem", 'Int'>
     readonly gameId: FieldRef<"CartItem", 'Int'>
     readonly quantity: FieldRef<"CartItem", 'Int'>
@@ -9436,7 +9419,6 @@ export namespace Prisma {
 
 
   export const CartItemScalarFieldEnum: {
-    id: 'id',
     cartId: 'cartId',
     gameId: 'gameId',
     quantity: 'quantity',
@@ -9759,7 +9741,6 @@ export namespace Prisma {
     AND?: CartItemWhereInput | CartItemWhereInput[]
     OR?: CartItemWhereInput[]
     NOT?: CartItemWhereInput | CartItemWhereInput[]
-    id?: IntFilter<"CartItem"> | number
     cartId?: IntFilter<"CartItem"> | number
     gameId?: IntFilter<"CartItem"> | number
     quantity?: IntFilter<"CartItem"> | number
@@ -9769,7 +9750,6 @@ export namespace Prisma {
   }
 
   export type CartItemOrderByWithRelationInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -9779,7 +9759,7 @@ export namespace Prisma {
   }
 
   export type CartItemWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
+    cartId_gameId?: CartItemCartIdGameIdCompoundUniqueInput
     AND?: CartItemWhereInput | CartItemWhereInput[]
     OR?: CartItemWhereInput[]
     NOT?: CartItemWhereInput | CartItemWhereInput[]
@@ -9789,10 +9769,9 @@ export namespace Prisma {
     price?: FloatFilter<"CartItem"> | number
     cart?: XOR<CartScalarRelationFilter, CartWhereInput>
     game?: XOR<GameScalarRelationFilter, GameWhereInput>
-  }, "id">
+  }, "cartId_gameId">
 
   export type CartItemOrderByWithAggregationInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -9808,7 +9787,6 @@ export namespace Prisma {
     AND?: CartItemScalarWhereWithAggregatesInput | CartItemScalarWhereWithAggregatesInput[]
     OR?: CartItemScalarWhereWithAggregatesInput[]
     NOT?: CartItemScalarWhereWithAggregatesInput | CartItemScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"CartItem"> | number
     cartId?: IntWithAggregatesFilter<"CartItem"> | number
     gameId?: IntWithAggregatesFilter<"CartItem"> | number
     quantity?: IntWithAggregatesFilter<"CartItem"> | number
@@ -10153,7 +10131,6 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedCreateInput = {
-    id?: number
     cartId: number
     gameId: number
     quantity?: number
@@ -10168,7 +10145,6 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
     cartId?: IntFieldUpdateOperationsInput | number
     gameId?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
@@ -10176,7 +10152,6 @@ export namespace Prisma {
   }
 
   export type CartItemCreateManyInput = {
-    id?: number
     cartId: number
     gameId: number
     quantity?: number
@@ -10189,7 +10164,6 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
     cartId?: IntFieldUpdateOperationsInput | number
     gameId?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
@@ -10623,8 +10597,12 @@ export namespace Prisma {
     isNot?: GameWhereInput
   }
 
+  export type CartItemCartIdGameIdCompoundUniqueInput = {
+    cartId: number
+    gameId: number
+  }
+
   export type CartItemCountOrderByAggregateInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -10632,7 +10610,6 @@ export namespace Prisma {
   }
 
   export type CartItemAvgOrderByAggregateInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -10640,7 +10617,6 @@ export namespace Prisma {
   }
 
   export type CartItemMaxOrderByAggregateInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -10648,7 +10624,6 @@ export namespace Prisma {
   }
 
   export type CartItemMinOrderByAggregateInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -10656,7 +10631,6 @@ export namespace Prisma {
   }
 
   export type CartItemSumOrderByAggregateInput = {
-    id?: SortOrder
     cartId?: SortOrder
     gameId?: SortOrder
     quantity?: SortOrder
@@ -11350,7 +11324,6 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedCreateWithoutGameInput = {
-    id?: number
     cartId: number
     quantity?: number
     price: number
@@ -11434,7 +11407,6 @@ export namespace Prisma {
     AND?: CartItemScalarWhereInput | CartItemScalarWhereInput[]
     OR?: CartItemScalarWhereInput[]
     NOT?: CartItemScalarWhereInput | CartItemScalarWhereInput[]
-    id?: IntFilter<"CartItem"> | number
     cartId?: IntFilter<"CartItem"> | number
     gameId?: IntFilter<"CartItem"> | number
     quantity?: IntFilter<"CartItem"> | number
@@ -11543,7 +11515,6 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedCreateWithoutCartInput = {
-    id?: number
     gameId: number
     quantity?: number
     price: number
@@ -11861,7 +11832,6 @@ export namespace Prisma {
   }
 
   export type CartItemCreateManyGameInput = {
-    id?: number
     cartId: number
     quantity?: number
     price: number
@@ -11874,14 +11844,12 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedUpdateWithoutGameInput = {
-    id?: IntFieldUpdateOperationsInput | number
     cartId?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
   }
 
   export type CartItemUncheckedUpdateManyWithoutGameInput = {
-    id?: IntFieldUpdateOperationsInput | number
     cartId?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
@@ -11939,7 +11907,6 @@ export namespace Prisma {
   }
 
   export type CartItemCreateManyCartInput = {
-    id?: number
     gameId: number
     quantity?: number
     price: number
@@ -11952,14 +11919,12 @@ export namespace Prisma {
   }
 
   export type CartItemUncheckedUpdateWithoutCartInput = {
-    id?: IntFieldUpdateOperationsInput | number
     gameId?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
   }
 
   export type CartItemUncheckedUpdateManyWithoutCartInput = {
-    id?: IntFieldUpdateOperationsInput | number
     gameId?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number

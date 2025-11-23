@@ -146,7 +146,6 @@ exports.Prisma.CartScalarFieldEnum = {
 };
 
 exports.Prisma.CartItemScalarFieldEnum = {
-  id: 'id',
   cartId: 'cartId',
   gameId: 'gameId',
   quantity: 'quantity',

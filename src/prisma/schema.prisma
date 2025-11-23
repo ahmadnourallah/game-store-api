@@ -41,13 +41,14 @@ model Cart {
 }
 
 model CartItem {
-    id       Int   @id @default(autoincrement())
     cart     Cart  @relation(fields: [cartId], references: [id])
     cartId   Int
     game     Game  @relation(fields: [gameId], references: [id])
     gameId   Int
     quantity Int   @default(1)
     price    Float
+
+    @@id([cartId, gameId])
 }
 
 model Platform {
