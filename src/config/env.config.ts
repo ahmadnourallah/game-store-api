@@ -8,6 +8,7 @@ interface ConfigType {
 	DB_URL: string;
 	JWT_SECRET: string;
 	JWT_EXPIRATION_TIME: StringValue;
+	ALLOWED_ORIGINS: string[];
 }
 
 const config: ConfigType = {
@@ -16,6 +17,7 @@ const config: ConfigType = {
 	JWT_SECRET: process.env.JWT_SECRET || "",
 	JWT_EXPIRATION_TIME:
 		(process.env.JWT_EXPIRATION_TIME as StringValue) || "2D",
+	ALLOWED_ORIGINS: JSON.parse(process.env.ALLOWED_ORIGINS || "[]"),
 };
 
 export default config;
