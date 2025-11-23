@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientError } from "../middleware/error.middleware";
 import { validationResult, query, body, param } from "express-validator";
-import { PrismaClient } from "../prisma/src/db/index";
+import { Cart, PrismaClient } from "../prisma/src/db/index";
 
 const prisma = new PrismaClient();
 
@@ -378,6 +378,64 @@ const validatePublisherId = () => [
 	},
 ];
 
+const validateCartItem = () => [
+	body("gameId")
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage("Game's id cannot be empty")
+		.bail()
+		.toInt()
+		.isNumeric()
+		.withMessage("Game's id must be a number")
+		.bail(),
+
+	body("quantity")
+		.trim()
+		.escape()
+		.default(1)
+		.toInt()
+		.isInt({ min: 1 })
+		.withMessage("Quantity must be a number not less than 1")
+		.bail(),
+
+	validateResults,
+];
+
+const validateCartItemId = () => [
+	param("gameId")
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage("Game's id cannot be empty")
+		.bail()
+		.toInt()
+		.isNumeric()
+		.withMessage("Game's id must be a number")
+		.bail(),
+
+	validateResults,
+
+	async (req: Request, res: Response, next: NextFunction) => {
+		const cart = (await prisma.cart.findUnique({
+			where: { userId: req?.user?.id },
+		})) as Cart;
+
+		const cartItemExists = await prisma.cartItem.findUnique({
+			where: {
+				cartId_gameId: {
+					cartId: cart.id,
+					gameId: req?.params?.gameId as unknown as number,
+				},
+			},
+		});
+
+		if (!cartItemExists)
+			throw new ClientError({ resource: "Resource not found" }, 404);
+		next();
+	},
+];
+
 export {
 	validateQueries,
 	validateUser,
@@ -391,4 +449,6 @@ export {
 	validateGenreName,
 	validatePublisher,
 	validatePublisherId,
+	validateCartItem,
+	validateCartItemId,
 };
