@@ -13,7 +13,6 @@ router.delete(
 	"/:gameId",
 	isAuthenticated,
 	validateCartItemId(),
-	validateCartItem(),
 	cartController.deleteCartItem
 );
 
