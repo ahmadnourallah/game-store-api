@@ -92,7 +92,7 @@ const validateUser = () => [
 		.withMessage("Password must be between 8-16 characters")
 		.matches("[0-9]")
 		.withMessage("Password must contain a number")
-		.matches("(?=.*?[#@$?])")
+		.matches("(?=.*[@$!%*#?&])")
 		.withMessage("Password must contain a special character"),
 	validateResults,
 ];
