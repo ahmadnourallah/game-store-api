@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const getPlatforms = async (req: Request, res: Response) => {
 	const { start, end, search, orderBy, order } = matchedData(req);
 
-	const platforms = await prisma.platform.findMany({
+	const query = {
 		where: {
 			name: { contains: search },
 		},
@@ -16,11 +16,16 @@ const getPlatforms = async (req: Request, res: Response) => {
 		orderBy: {
 			[orderBy === "title" ? "name" : "createdAt"]: order,
 		},
-	});
+	};
+
+	const [platforms, total] = await prisma.$transaction([
+		prisma.platform.findMany(query),
+		prisma.platform.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: platforms.length, platforms },
+		data: { total, platforms },
 	});
 };
 
@@ -41,7 +46,7 @@ const getPlatformGames = async (req: Request, res: Response) => {
 	const { start, end, search, order, orderBy, platformName } =
 		matchedData(req);
 
-	const games = await prisma.game.findMany({
+	const query = {
 		where: {
 			platforms: {
 				some: {
@@ -59,11 +64,16 @@ const getPlatformGames = async (req: Request, res: Response) => {
 			[orderBy === "title" ? "title" : "createdAt"]: order,
 		},
 		include: { platforms: true },
-	});
+	};
+
+	const [games, total] = await prisma.$transaction([
+		prisma.game.findMany(query),
+		prisma.game.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: games.length, games },
+		data: { total, games },
 	});
 };
 

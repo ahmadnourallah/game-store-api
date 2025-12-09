@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const getPublishers = async (req: Request, res: Response) => {
 	const { start, end, search, orderBy, order } = matchedData(req);
 
-	const publishers = await prisma.publisher.findMany({
+	const query = {
 		where: {
 			name: { contains: search },
 		},
@@ -16,11 +16,16 @@ const getPublishers = async (req: Request, res: Response) => {
 		orderBy: {
 			[orderBy === "title" ? "name" : "createdAt"]: order,
 		},
-	});
+	};
+
+	const [publishers, total] = await prisma.$transaction([
+		prisma.publisher.findMany(query),
+		prisma.publisher.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: publishers.length, publishers },
+		data: { total, publishers },
 	});
 };
 
@@ -41,7 +46,7 @@ const getPublisherGames = async (req: Request, res: Response) => {
 	const { start, end, search, order, orderBy, publisherId } =
 		matchedData(req);
 
-	const games = await prisma.game.findMany({
+	const query = {
 		where: {
 			publishers: {
 				some: {
@@ -58,11 +63,16 @@ const getPublisherGames = async (req: Request, res: Response) => {
 		orderBy: {
 			[orderBy === "title" ? "title" : "createdAt"]: order,
 		},
-	});
+	};
+
+	const [games, total] = await prisma.$transaction([
+		prisma.game.findMany(query),
+		prisma.game.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: games.length, games },
+		data: { total, games },
 	});
 };
 

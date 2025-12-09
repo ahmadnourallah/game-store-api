@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const getGames = async (req: Request, res: Response) => {
 	const { start, end, search, orderBy, order } = matchedData(req);
 
-	const games = await prisma.game.findMany({
+	const query = {
 		where: {
 			OR: [
 				{ title: { contains: search } },
@@ -20,11 +20,16 @@ const getGames = async (req: Request, res: Response) => {
 			[orderBy === "title" ? "title" : "createdAt"]: order,
 		},
 		include: { genres: true, publishers: true, platforms: true },
-	});
+	};
+
+	const [games, total] = await prisma.$transaction([
+		prisma.game.findMany(query),
+		prisma.game.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: games.length, games },
+		data: { total, games },
 	});
 };
 

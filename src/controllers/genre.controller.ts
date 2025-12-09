@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const getGenres = async (req: Request, res: Response) => {
 	const { start, end, search, orderBy, order } = matchedData(req);
 
-	const genres = await prisma.genre.findMany({
+	const query = {
 		where: {
 			name: { contains: search },
 		},
@@ -16,11 +16,16 @@ const getGenres = async (req: Request, res: Response) => {
 		orderBy: {
 			[orderBy === "title" ? "name" : "createdAt"]: order,
 		},
-	});
+	};
+
+	const [genres, total] = await prisma.$transaction([
+		prisma.genre.findMany(query),
+		prisma.genre.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: genres.length, genres },
+		data: { total, genres },
 	});
 };
 
@@ -40,7 +45,7 @@ const getGenre = async (req: Request, res: Response) => {
 const getGenreGames = async (req: Request, res: Response) => {
 	const { start, end, search, order, orderBy, genreName } = matchedData(req);
 
-	const games = await prisma.game.findMany({
+	const query = {
 		where: {
 			genres: {
 				some: {
@@ -58,11 +63,16 @@ const getGenreGames = async (req: Request, res: Response) => {
 			[orderBy === "title" ? "title" : "createdAt"]: order,
 		},
 		include: { platforms: true },
-	});
+	};
+
+	const [games, total] = await prisma.$transaction([
+		prisma.game.findMany(query),
+		prisma.game.count({ where: query.where }),
+	]);
 
 	res.status(200).json({
 		status: "success",
-		data: { count: games.length, games },
+		data: { total, games },
 	});
 };
 
