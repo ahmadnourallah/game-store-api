@@ -16,9 +16,8 @@ import "./config/passport.config";
 
 const app = express();
 
-app.use(jsonParser);
 app.use(express.urlencoded({ extended: true }));
-app.use("/images", express.static("images/"));
+app.use(jsonParser);
 app.use(
 	cors({
 		origin: function (origin: string | undefined, callback: Function) {
@@ -35,6 +34,7 @@ app.use(
 	})
 );
 
+app.use("/images", express.static("images/"));
 app.use("/users", userRouter);
 app.use("/games", gameRouter);
 app.use("/platforms", platformRouter);
