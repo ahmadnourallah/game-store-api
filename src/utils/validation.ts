@@ -46,7 +46,7 @@ const validateQueries = () => [
 		.withMessage("End cannot be negative")
 		.custom((end, { req }) => !(end <= Number(req?.query?.start)))
 		.withMessage("End must be larger than start")
-		.custom((end, { req }) => !(end - Number(req?.query?.start) >= 30))
+		.custom((end, { req }) => !(end - Number(req?.query?.start) > 30))
 		.withMessage("Maximum number of items requested is 30"),
 	query("search")
 		.default("")
