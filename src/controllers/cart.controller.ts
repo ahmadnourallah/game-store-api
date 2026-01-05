@@ -4,6 +4,40 @@ import { matchedData } from "express-validator";
 
 const prisma = new PrismaClient();
 
+const getCarts = async (req: Request, res: Response) => {
+	const { start, end } = matchedData(req);
+
+	const query = {
+		where: {
+			NOT: {
+				cartItems: {
+					none: {},
+				},
+			},
+		},
+		skip: start,
+		take: end - start,
+		include: {
+			cartItems: true,
+			user: {
+				select: {
+					name: true,
+				},
+			},
+		},
+	};
+
+	const [carts, total] = await prisma.$transaction([
+		prisma.cart.findMany(query),
+		prisma.cart.count({ where: query.where }),
+	]);
+
+	res.status(200).json({
+		status: "success",
+		data: { total, carts },
+	});
+};
+
 const getCart = async (req: Request, res: Response) => {
 	const cart = await prisma.cart.findUnique({
 		where: { userId: req?.user?.id },
@@ -86,6 +120,7 @@ const deleteCartItem = async (req: Request, res: Response) => {
 
 export default {
 	getCart,
+	getCarts,
 	deleteCart,
 	deleteCartItem,
 	createCartItem,

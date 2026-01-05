@@ -1,11 +1,23 @@
 import { Router } from "express";
-import { isAuthenticated } from "../middleware/auth.middleware";
-import { validateCartItem, validateCartItemId } from "../utils/validation";
+import { isAuthenticated, isAdmin } from "../middleware/auth.middleware";
+import {
+	validateCartItem,
+	validateCartItemId,
+	validateQueries,
+} from "../utils/validation";
 import cartController from "../controllers/cart.controller";
 
 const router = Router();
 
 router.get("/", isAuthenticated, cartController.getCart);
+
+router.get(
+	"/all",
+	isAuthenticated,
+	isAdmin,
+	validateQueries(),
+	cartController.getCarts
+);
 
 router.delete("/", isAuthenticated, cartController.deleteCart);
 
