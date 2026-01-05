@@ -12,12 +12,11 @@ import cartRouter from "./routes/cart.router";
 import jsonParser from "./middleware/jsonParser.middleware";
 import config from "./config/env.config";
 import cors from "cors";
+import multer from "multer";
 import "./config/passport.config";
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(jsonParser);
 app.use(
 	cors({
 		origin: function (origin: string | undefined, callback: Function) {
@@ -33,10 +32,13 @@ app.use(
 		},
 	})
 );
+app.use(express.urlencoded({ extended: true }));
+app.use(jsonParser);
 
 app.use("/images", express.static("images/"));
-app.use("/users", userRouter);
 app.use("/games", gameRouter);
+app.use(multer().none());
+app.use("/users", userRouter);
 app.use("/platforms", platformRouter);
 app.use("/genres", genreRouter);
 app.use("/publishers", publisherRouter);
