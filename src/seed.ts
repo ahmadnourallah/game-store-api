@@ -54,7 +54,7 @@ async function downloadImage(
 		}
 
 		const fileHash = hash.digest("hex");
-		await writeFile(path.join(destination, fileHash), fileChunks);
+		await writeFile(path.join(absDestination, fileHash), fileChunks);
 
 		console.log("Done!");
 		return path.join(destination, fileHash);
