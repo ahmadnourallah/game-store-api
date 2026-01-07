@@ -3,13 +3,13 @@ import type { ReadableStream } from "node:stream/web";
 import { mkdir, writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import {
 	ADMIN_EMAIL,
 	ADMIN_NAME,
 	ADMIN_PASS,
 	ADAPTER,
 } from "./config/env.config";
+import { getRootPathSync } from "get-root-path";
 import path from "node:path";
 import bcryptjs from "bcryptjs";
 import * as crypto from "crypto";
@@ -35,9 +35,7 @@ async function downloadImage(
 	}
 
 	if (response && response.body) {
-		const __filename = fileURLToPath(import.meta.url);
-		const __dirname = path.dirname(path.dirname(__filename));
-		const absDestination = path.join(__dirname, destination);
+		const absDestination = path.join(getRootPathSync(), destination);
 
 		if (!existsSync(absDestination)) await mkdir(absDestination);
 
