@@ -3,6 +3,7 @@ import {
 	clientErrorHandler,
 } from "./middleware/error.middleware";
 import { ALLOWED_ORIGINS } from "./config/env.config";
+import { existsSync, mkdir } from "node:fs";
 import express from "express";
 import userRouter from "./routes/user.router";
 import gameRouter from "./routes/game.router";
@@ -34,6 +35,8 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(jsonParser);
+
+if (!existsSync("images")) mkdir("images", () => null);
 
 app.use("/images", express.static("images/"));
 app.use("/games", gameRouter);
