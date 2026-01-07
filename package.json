@@ -6,9 +6,9 @@
 	"scripts": {
 		"seed": "tsx dist/src/seed.js seed",
 		"start": "tsx dist/src/server.js",
-		"prebuild": "rimraf dist/",
+		"prebuild": "rimraf dist/ && prisma generate",
 		"build": "tsc",
-		"postbuild": "prisma migrate deploy && prisma generate"
+		"postbuild": "prisma migrate deploy"
 	},
 	"keywords": [],
 	"author": "Ahmad Nour Alla",
@@ -26,6 +26,7 @@
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
 		"express-validator": "^7.2.1",
+		"get-root-path": "^3.0.1",
 		"jsonwebtoken": "^9.0.2",
 		"multer": "^2.0.1",
 		"next-auth": "^4.24.13",
