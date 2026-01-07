@@ -2,6 +2,7 @@ import {
 	serverErrorHandler,
 	clientErrorHandler,
 } from "./middleware/error.middleware";
+import { ALLOWED_ORIGINS } from "./config/env.config";
 import express from "express";
 import userRouter from "./routes/user.router";
 import gameRouter from "./routes/game.router";
@@ -10,7 +11,6 @@ import genreRouter from "./routes/genre.router";
 import publisherRouter from "./routes/publisher.router";
 import cartRouter from "./routes/cart.router";
 import jsonParser from "./middleware/jsonParser.middleware";
-import config from "./config/env.config";
 import cors from "cors";
 import multer from "multer";
 import "./config/passport.config";
@@ -22,7 +22,7 @@ app.use(
 		origin: function (origin: string | undefined, callback: Function) {
 			// allow requests with no origin
 			if (!origin) return callback(null, true);
-			if (config.ALLOWED_ORIGINS.indexOf(origin) === -1) {
+			if (ALLOWED_ORIGINS.indexOf(origin) === -1) {
 				var msg =
 					"The CORS policy for this site does not " +
 					"allow access from the specified Origin.";

@@ -4,8 +4,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASS } from "./config/env.config";
 import path from "node:path";
-import config from "./config/env.config";
 import bcryptjs from "bcryptjs";
 import * as crypto from "crypto";
 
@@ -80,12 +80,12 @@ async function purge() {
 
 async function seed() {
 	const admin = await prisma.user.upsert({
-		where: { email: config.ADMIN_EMAIL },
+		where: { email: ADMIN_EMAIL },
 		update: {},
 		create: {
-			name: config.ADMIN_NAME,
-			email: config.ADMIN_EMAIL,
-			password: await bcryptjs.hash(config.ADMIN_PASS, 10),
+			name: ADMIN_NAME,
+			email: ADMIN_EMAIL,
+			password: await bcryptjs.hash(ADMIN_PASS, 10),
 			role: "ADMIN",
 			cart: { create: {} },
 		},
