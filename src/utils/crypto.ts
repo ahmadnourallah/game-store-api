@@ -1,5 +1,5 @@
 import { JWT_SECRET, JWT_EXPIRATION_TIME } from "../config/env.config";
-import type { User } from "../prisma/src/db/index";
+import type { User } from "~/prisma/generated/client";
 import jwt from "jsonwebtoken";
 
 function issueJWT(user: Omit<User, "password">) {

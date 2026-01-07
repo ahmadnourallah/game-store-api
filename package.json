@@ -11,6 +11,7 @@
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
+		"@prisma/adapter-pg": "^7.2.0",
 		"@prisma/client": "^7.2.0",
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.1",
@@ -26,6 +27,7 @@
 		"next-auth": "^4.24.13",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",
+		"pg": "^8.16.3",
 		"swagger-jsdoc": "^6.2.8",
 		"swagger-ui-express": "^5.0.1"
 	},

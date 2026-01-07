@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { Cart, Game, PrismaClient } from "../prisma/src/db";
+import { type Cart, type Game, PrismaClient } from "~/prisma/generated/client";
 import { matchedData } from "express-validator";
+import { ADAPTER } from "../config/env.config";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({ adapter: ADAPTER });
 
 const getCarts = async (req: Request, res: Response) => {
 	const { start, end } = matchedData(req);

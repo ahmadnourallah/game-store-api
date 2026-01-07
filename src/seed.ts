@@ -1,15 +1,20 @@
-import { PrismaClient } from "./prisma/src/db/index";
+import { PrismaClient } from "~/prisma/generated/client";
 import type { ReadableStream } from "node:stream/web";
 import { mkdir, writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASS } from "./config/env.config";
+import {
+	ADMIN_EMAIL,
+	ADMIN_NAME,
+	ADMIN_PASS,
+	ADAPTER,
+} from "./config/env.config";
 import path from "node:path";
 import bcryptjs from "bcryptjs";
 import * as crypto from "crypto";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({ adapter: ADAPTER });
 
 async function downloadImage(
 	url: string,

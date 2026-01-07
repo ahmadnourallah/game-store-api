@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { ClientError } from "../middleware/error.middleware";
 import { validationResult, query, body, param } from "express-validator";
-import { Cart, PrismaClient } from "../prisma/src/db/index";
+import { type Cart, PrismaClient } from "~/prisma/generated/client";
+import { ADAPTER } from "../config/env.config";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({ adapter: ADAPTER });
 
 type ValidationResultError = {
 	[key: string]: string;
