@@ -12,10 +12,9 @@
 		"build": "tsc",
 		"postbuild": "prisma migrate deploy"
 	},
-	"keywords": [],
 	"author": "Ahmad Nour Alla",
-	"license": "ISC",
-	"description": "",
+	"license": "GPL-3.0-only",
+	"description": "A full-fledged ecommerce RESTFul API, built with TypeScript, Express.js, and Prisma PostgreSQL.",
 	"dependencies": {
 		"@prisma/adapter-pg": "^7.2.0",
 		"@prisma/client": "^7.2.0",
